@@ -1,17 +1,25 @@
-# This tells Caddy to accept traffic on port 80
 :80 {
-    # If the request path starts with /tasks, send to task-service
+
+    encode gzip
+
+    log {
+        output stdout
+        format console
+    }
+
+    handle /app* {
+        reverse_proxy task-service:3009
+    }
+
     handle /tasks* {
         reverse_proxy task-service:3009
     }
 
-    # If the request path starts with /mail, send to mail-service
     handle /mail* {
         reverse_proxy mail-service:3009
     }
 
-    # Log everything to help with debugging
-    log {
-        output stdout
+    handle {
+        reverse_proxy task-service:3009
     }
 }

@@ -8,18 +8,18 @@
     }
 
     handle /app* {
-        reverse_proxy task-service:3009
+        reverse_proxy http://task-service:3009
     }
 
     handle /tasks* {
-        reverse_proxy task-service:3009
+        reverse_proxy http://task-service:3009
     }
 
     handle /mail* {
-        reverse_proxy mail-service:3009
+        reverse_proxy http://mail-service:3009
     }
 
     handle {
-        reverse_proxy task-service:3009
+        reverse_proxy http://task-service:3009
     }
 }

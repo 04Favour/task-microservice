@@ -7,11 +7,11 @@ http://:80 {
     }
 
     # Use handle_path to strip the prefix
-    handle_path /tasks* {
+    handle /tasks* {
         reverse_proxy task-service:3009
     }
 
-    handle_path /mail* {
+    handle /mail* {
         reverse_proxy mail-service:3009
     }
 

@@ -37,7 +37,7 @@ export class TasksController {
     return this.tasksService.deleteTask(id)
   }
 
-  @Get()
+  @Get('search')
   @ApiResponse({ status: 200, description: 'Task'})
   @ApiResponse({ status: 404, description: 'Not Found.'})
   GetTask(@Query('title') title: string){

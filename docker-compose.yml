@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: task-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: task_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
+  task-service:
+    build: ./apps/api-gateway
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - app-network
+  mail-service:
+    build: ./apps/email-consumer
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - app-network
+  caddy:
+    image: caddy:2-alpine
+    restart: always
+    ports: 
+      - "80:80"
+    volumes: 
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+    
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

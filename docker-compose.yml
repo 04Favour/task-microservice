@@ -11,7 +11,9 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  
+    networks: # Added this!
+      - app-network
+
   task-service:
     build: 
       context: .
@@ -19,8 +21,11 @@ services:
     restart: always
     env_file:
       - .env
+    depends_on: # Added this!
+      - postgres
     networks:
       - app-network
+
   mail-service:
     build: 
       context: .
@@ -30,6 +35,7 @@ services:
       - .env
     networks:
       - app-network
+
   caddy:
     image: caddy:2-alpine
     container_name: caddy

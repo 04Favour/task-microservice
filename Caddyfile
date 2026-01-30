@@ -1,5 +1,4 @@
-:80 {
-
+http://:80 {
     encode gzip
 
     log {
@@ -7,19 +6,17 @@
         format console
     }
 
-    handle /app* {
-        reverse_proxy http://task-service:3009
+    # Use handle_path to strip the prefix
+    handle_path /tasks* {
+        reverse_proxy task-service:3009
     }
 
-    handle /tasks* {
-        reverse_proxy http://task-service:3009
+    handle_path /mail* {
+        reverse_proxy mail-service:3009
     }
 
-    handle /mail* {
-        reverse_proxy http://mail-service:3009
-    }
-
+    # Catch-all for the root /
     handle {
-        reverse_proxy http://task-service:3009
+        reverse_proxy task-service:3009
     }
 }

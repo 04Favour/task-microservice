@@ -11,6 +11,11 @@ import { queryObjects } from 'v8';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  @Get()
+  helloWorld(){
+    return 'Hello World of Success!'
+  }
+
   @Post()
   @ApiResponse({ status: 201, description: 'The task has been successfully created.'})
   @ApiResponse({ status: 409, description: 'Conflict.'})

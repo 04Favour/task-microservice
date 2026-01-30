@@ -13,14 +13,18 @@ services:
       - postgres_data:/var/lib/postgresql/data
   
   task-service:
-    build: ./apps/api-gateway
+    build: 
+      context: .
+      dockerfile: apps/api-gateway/Dockerfile
     restart: always
     env_file:
       - .env
     networks:
       - app-network
   mail-service:
-    build: ./apps/email-consumer
+    build: 
+      context: .
+      dockerfile: apps/email-consumer/Dockerfile
     restart: always
     env_file:
       - .env

@@ -1,3 +1,7 @@
+#Private Keys
+/task-microservice-US.pem
+/task-microservice.pem
+
 # compiled output
 /dist
 /node_modules

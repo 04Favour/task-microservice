@@ -11,9 +11,9 @@ FROM node:20-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 USER node
-COPY --from=builder /app/dist/apps/email-consumer ./dist
+COPY --from=builder /app/dist/apps/email-consumer ./dist/apps/email-consumer/
 COPY --from=builder /app/node_modules ./node_modules
 COPY package.json ./
 
 EXPOSE 3009
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/apps/email-consumer/main.js"]

@@ -16,12 +16,21 @@ jobs:
             username: ${{secrets.DOCKERHUB_USERNAME}}
             password: ${{secrets.DOCKERHUB_TOKEN}}
         
-        - name: Build and Push
+        - name: Build and Push Task Service
           uses: docker/build-push-action@v5
           with: 
             context: .
+            file: apps/api-gateway/Dockerfile
             push: true
-            tags: ${{secrets.DOCKERHUB_USERNAME}}/task-microservice:latest
+            tags: ${{secrets.DOCKERHUB_USERNAME}}/task-service:latest
+        
+        - name: Build and Push Mail Service
+          uses: docker/build-push-action@v5
+          with: 
+            context: .
+            file: apps/email-consumer/Dockerfile
+            push: true
+            tags: ${{secrets.DOCKERHUB_USERNAME}}/mail-service:latest
 
   deploy:
     runs-on: self-hosted
@@ -37,17 +46,12 @@ jobs:
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
           echo "NODE_ENV=production" >> .env
-
-      - name: Clean up Docker resources
-        run: |
-          docker system prune -af --filter "until=48h"
-          docker volume prune -f --filter "until=48h"
 
       - name: Deploy with Docker Compose
         run: |
-          cd ${{github.workspace}}
           docker compose pull
-          docker compose up -d 
-          docker image prune -af --filter="until=24h"
+          docker compose up -d
+          docker image prune -af --filter "until=24h"
           docker container prune -f
